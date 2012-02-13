@@ -84,7 +84,7 @@ describe "Hello create name" do
           BOX.shell_run "bundle update"
           BOX.shell_run "bundle exec passenger start -d -p #{port}"
           open("http://localhost:#{port}/").read
-          .should.be == 'hi'
+          .should.be == "Hi, Hello."
         ensure
           BOX.shell_run("bundle exec passenger stop -p #{port}") if `ps aux`["-p #{port}"]
         end

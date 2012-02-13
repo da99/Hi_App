@@ -4,7 +4,7 @@ require 'sinatra/base'
 class NAME < Sinatra::Base
   
   get( '/' ) do
-    "hi"
+    "Hi, #{NAME}."
   end
   
 end # === class NAME
