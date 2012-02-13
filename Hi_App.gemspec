@@ -8,8 +8,11 @@ Gem::Specification.new do |s|
   s.authors     = ["da99"]
   s.email       = ["i-hate-spam-45671204@mailinator.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Create a "Hello, World!" web app.}
+  s.description = %q{
+  Uses Sinatra and Passenger to create a starter
+  web app. Meant mainly for development.
+  }
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
