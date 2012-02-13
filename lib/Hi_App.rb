@@ -33,7 +33,7 @@ class Hi_App
       unless Dir.pwd[/\A\/tmp/]
         shell_run "bundle update"
       end
-      shell_run "git init && git add . && git commit -m \"First commit: Uni_Mind generated code.\""
+      shell_run "git init && git add . && git commit -m \"First commit: Hi_App generated code.\""
     }
   end # === def create_app
   
