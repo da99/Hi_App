@@ -3,6 +3,7 @@ require File.expand_path('spec/helper')
 require 'Hi_App'
 require 'Bacon_Colored'
 require "Unified_IO"
+require 'open-uri'
 
 Unified_IO::Local::Shell.quiet
 

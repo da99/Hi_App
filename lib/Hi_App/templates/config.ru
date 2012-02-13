@@ -1,3 +1,3 @@
 
-ruby "./NAME"
+require "./NAME"
 run NAME

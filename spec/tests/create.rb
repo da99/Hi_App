@@ -75,6 +75,23 @@ describe "Hello create name" do
     }
   end
 
+  it "creates a working app run by passenger" do
+    port = rand(4000..5000)
+    BIN 'create Hello'
+    chdir {
+      Dir.chdir('Hello') {
+        begin
+          BOX.shell_run "bundle update"
+          BOX.shell_run "bundle exec passenger start -d -p #{port}"
+          open("http://localhost:#{port}/").read
+          .should.be == 'hi'
+        ensure
+          BOX.shell_run("bundle exec passenger stop -p #{port}") if `ps aux`["-p #{port}"]
+        end
+      }
+    }
+  end
+  
 end # === describe UNI_MIND sinatra create_app
 
 
