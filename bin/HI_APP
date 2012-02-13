@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 # -*- ruby -*-
 
-path  = File.join *ARGV
+path  = File.join(*ARGV).strip
 puts "", 'Executing: ', path
 
 require 'Hi_App' 
 app = Hi_App.new
-app.public_send *ARGV
+app.public_send *(path.gsub(/\A\/|\/\Z/, '').split('/'))
 
 at_exit {
   puts ""

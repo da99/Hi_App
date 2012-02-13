@@ -2,12 +2,14 @@ require 'Hi_App/version'
 require 'Unified_IO'
 class Hi_App
   
+  DIR = File.dirname(__FILE__) + "/#{self.name}"
+
   include Unified_IO::Local::Shell::DSL
 
   private # ======================================================
 
-  def read file
-    dir = File.join(  File.dirname(__FILE__), file )
+  def read name
+    file = File.join( DIR , 'templates', name )
     File.read file
   end
 
@@ -27,7 +29,9 @@ class Hi_App
     files.each do |k,v|
     end
 
-    shell_run "git init && git add . && git commit -m \"First commit: Uni_Mind generated code.\""
+    Dir.chdir(name) {
+      shell_run "git init && git add . && git commit -m \"First commit: Uni_Mind generated code.\""
+    }
   end # === def create_app
   
 end # === class Hi_App

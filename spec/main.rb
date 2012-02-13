@@ -4,6 +4,8 @@ require 'Hi_App'
 require 'Bacon_Colored'
 require "Unified_IO"
 
+Unified_IO::Local::Shell.quiet
+
 def chdir
   BOX.chdir { yield }
 end
@@ -25,8 +27,7 @@ class Box
   def bin cmd
     results = ''
     chdir {
-      # Unified_IO::Local::Shell.new.run_backticks "bundle exec Hi_App #{cmd}"
-      results = `bundle exec Hi_App #{cmd} 2>&1`
+      results = `bundle exec HI_APP #{cmd} 2>&1`
       if $?.exitstatus != 0
         raise results
       end

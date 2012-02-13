@@ -1,5 +1,5 @@
 
-describe "Hi_App create/Hello" do
+describe "HI_APP create/Hello" do
   
   before { BOX.reset }
   
@@ -11,5 +11,5 @@ describe "Hi_App create/Hello" do
     }
   end
   
-end # === Hi_App create Hi_App
+end # === Hi_App create HI_APP
 
