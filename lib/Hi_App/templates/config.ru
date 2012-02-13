@@ -1,0 +1,3 @@
+
+ruby "./NAME"
+run NAME

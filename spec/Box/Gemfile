@@ -1,0 +1,3 @@
+source :rubygems
+
+gem 'Hi_App', :path=>'/home/da01/MyLife/apps/GEMS/Hi_App'

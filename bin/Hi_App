@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+# -*- ruby -*-
+
+path  = File.join *ARGV
+puts "", 'Executing: ', path
+
+require 'Hi_App' 
+app = Hi_App.new
+app.public_send *ARGV
+
+at_exit {
+  puts ""
+}
+
