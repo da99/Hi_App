@@ -19,7 +19,7 @@ class Hi_App
     shell_run "mkdir -p #{name}/public"
     files = {}
 
-    %w{ Gemfile Gemfile.lock config.ru NAME.rb .gitignore }.each { |f|
+    %w{ Gemfile config.ru NAME.rb .gitignore }.each { |f|
       path = File.expand_path "#{name}/#{f.sub('NAME', name)}"
       next if File.exists?(path)
       
@@ -30,6 +30,9 @@ class Hi_App
     end
 
     Dir.chdir(name) {
+      unless Dir.pwd[/\A\/tmp/]
+        shell_run "bundle update"
+      end
       shell_run "git init && git add . && git commit -m \"First commit: Uni_Mind generated code.\""
     }
   end # === def create_app
