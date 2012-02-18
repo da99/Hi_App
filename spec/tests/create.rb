@@ -61,6 +61,13 @@ describe "Hello create name" do
     }
   end
   
+  it 'git ignores log/*' do
+    chdir {
+      File.read("Hello_Prime/.gitignore")[%r!^log/\*$!]
+      .should == "log/*"
+    }
+  end
+
   it 'git ignores logs/*' do
     chdir {
       File.read("Hello_Prime/.gitignore")[%r!^logs/\*$!]
