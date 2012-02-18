@@ -68,10 +68,10 @@ describe "Hello create name" do
     }
   end
 
-  it 'creates a git commit of: First commit' do
+  it 'creates a git commit of: Hi_App generated code' do
     chdir {
       `cd Hello_Prime && git log -n 1 --oneline`.strip
-      .should.match %r!First commit!
+      .should.match %r!Hi_App generated code!
     }
   end
 
