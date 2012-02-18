@@ -1,3 +1,3 @@
 
 require "./NAME"
-run NAME
+run KNAME

@@ -16,6 +16,7 @@ class Hi_App
   public # =======================================================
 
   def create name
+    kname = name.sub(/^./) { |s| s.upcase }
     shell_run "mkdir -p #{name}/public"
     files = {}
 
@@ -23,7 +24,7 @@ class Hi_App
       path = File.expand_path "#{name}/#{f.sub('NAME', name)}"
       next if File.exists?(path)
       
-      File.write path, read(f).gsub('NAME', name)
+      File.write path, read(f).gsub('KNAME', kname).gsub('NAME', name)
     }
 
     files.each do |k,v|

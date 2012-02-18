@@ -1,7 +1,7 @@
 
 require 'sinatra/base'
 
-class NAME < Sinatra::Base
+class KNAME < Sinatra::Base
   
   get( '/' ) do
     "Hi, #{NAME}."

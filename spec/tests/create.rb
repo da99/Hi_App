@@ -41,7 +41,7 @@ describe "Hello create name" do
   it 'creates file   /name/name.rb' do
     str = "class Hello_Prime"
     chdir {
-      File.read("Hello_Prime/Hello.rb")[str]
+      File.read("Hello_Prime/Hello_Prime.rb")[str]
       .should == str
     }
   end
@@ -83,7 +83,7 @@ describe "Hello create name" do
           BOX.shell_run "bundle update"
           BOX.shell_run "bundle exec passenger start -d -p #{port}"
           open("http://localhost:#{port}/").read
-          .should.be == "Hi, Hello."
+          .should.be == "Hi, Hello_Prime."
         ensure
           BOX.shell_run("bundle exec passenger stop -p #{port}") if `ps aux`["-p #{port}"]
         end
