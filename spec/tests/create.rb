@@ -2,7 +2,14 @@
 describe "Hello create name" do
   
   before {
-    chdir { `rm -rf Hello` }
+    chdir { 
+      `rm -rf Hello` 
+      prime = 'Hello_Prime'
+      if not File.directory?(prime)
+        BIN("create #{prime}")
+        at_exit { `rm -rf #{prime}`}
+      end
+    }
   }
   
   it 'does not overwrite existing files.' do
@@ -17,74 +24,82 @@ describe "Hello create name" do
   end
 
   it 'creates folder /name/public' do
-    BIN "create Hello"
     chdir {
-      File.directory?("Hello/public")
+      File.directory?("Hello_Prime/public")
       .should.be == true
     }
   end
 
   it 'creates file   /name/config.ru' do
-    str = "run Hello"
-    BIN "create Hello"
+    str = "run Hello_Prime"
     chdir {
-      File.read("Hello/config.ru")[str]
+      File.read("Hello_Prime/config.ru")[str]
       .should == str
     }
   end
 
   it 'creates file   /name/name.rb' do
-    str = "class Hello"
-    BIN "create Hello"
+    str = "class Hello_Prime"
     chdir {
-      File.read("Hello/Hello.rb")[str]
+      File.read("Hello_Prime/Hello.rb")[str]
       .should == str
     }
   end
 
   it 'creates file   /name/Gemfile' do
     r = %r!gem .sinatra.!
-    BIN "create Hello"
     chdir {
-      File.read("Hello/Gemfile")[r]
+      File.read("Hello_Prime/Gemfile")[r]
       .should.match r
     }
   end
 
   it 'git ignores tmp/*' do
-    BIN "create Hello"
     chdir {
-      File.read("Hello/.gitignore")[%r!^tmp/\*$!]
+      File.read("Hello_Prime/.gitignore")[%r!^tmp/\*$!]
       .should == "tmp/*"
     }
   end
   
   it 'git ignores logs/*' do
-    BIN "create Hello"
     chdir {
-      File.read("Hello/.gitignore")[%r!^logs/\*$!]
+      File.read("Hello_Prime/.gitignore")[%r!^logs/\*$!]
       .should == "logs/*"
     }
   end
 
   it 'creates a git commit of: First commit' do
-    BIN "create Hello"
     chdir {
-      `cd Hello && git log -n 1 --oneline`.strip
+      `cd Hello_Prime && git log -n 1 --oneline`.strip
       .should.match %r!First commit!
     }
   end
 
   it "creates a working app run by passenger" do
     port = rand(4000..5000)
-    BIN 'create Hello'
     chdir {
-      Dir.chdir('Hello') {
+      Dir.chdir('Hello_Prime') {
         begin
           BOX.shell_run "bundle update"
           BOX.shell_run "bundle exec passenger start -d -p #{port}"
           open("http://localhost:#{port}/").read
           .should.be == "Hi, Hello."
+        ensure
+          BOX.shell_run("bundle exec passenger stop -p #{port}") if `ps aux`["-p #{port}"]
+        end
+      }
+    }
+  end
+
+  it "creates a working app with route /time" do
+    port = rand(4000..5000)
+    chdir {
+      Dir.chdir('Hello_Prime') {
+        begin
+          BOX.shell_run "bundle update"
+          BOX.shell_run "bundle exec passenger start -d -p #{port}"
+          open("http://localhost:#{port}/time").read
+          .should.match %r!Time: \d{2} - \d{2}!
         ensure
           BOX.shell_run("bundle exec passenger stop -p #{port}") if `ps aux`["-p #{port}"]
         end
