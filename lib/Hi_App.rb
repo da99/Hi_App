@@ -1,10 +1,9 @@
 require 'Hi_App/version'
-require 'Unified_IO'
+require 'Exit_Zero'
+
 class Hi_App
   
   DIR = File.dirname(__FILE__) + "/#{self.name}"
-
-  include Unified_IO::Local::Shell::DSL
 
   private # ======================================================
 
@@ -17,7 +16,7 @@ class Hi_App
 
   def create name
     kname = name.sub(/^./) { |s| s.upcase }
-    shell_run "mkdir -p #{name}/public"
+    Exit_Zero "mkdir -p #{name}/public"
     files = {}
 
     %w{ Gemfile config.ru NAME.rb .gitignore }.each { |f|
@@ -32,9 +31,9 @@ class Hi_App
 
     Dir.chdir(name) {
       unless Dir.pwd[/\A\/tmp/]
-        shell_run "bundle update"
+        Exit_Zero "bundle update"
       end
-      shell_run "git init && git add . && git commit -m \"Added: Hi_App generated code.\""
+      Exit_Zero "git init && git add . && git commit -m \"Added: Hi_App generated code.\""
     }
   end # === def create_app
   

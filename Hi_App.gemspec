@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   
   # s.rubyforge_project = "Hi_App"
   # specify any dependencies here; for example:
-  s.add_runtime_dependency 'Unified_IO'
+  s.add_runtime_dependency 'Exit_Zero'
   s.add_runtime_dependency 'sinatra'
   s.add_runtime_dependency 'passenger'
   

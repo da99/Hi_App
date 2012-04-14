@@ -2,10 +2,9 @@
 require File.expand_path('spec/helper')
 require 'Hi_App'
 require 'Bacon_Colored'
-require "Unified_IO"
+require "Exit_Zero"
 require 'open-uri'
 
-Unified_IO::Local::Shell.quiet
 
 def chdir
   BOX.chdir { yield }
@@ -17,8 +16,6 @@ end
 
 class Box
   
-  include Unified_IO::Local::Shell::DSL
-
   FOLDER = "/tmp/Hi_App"
 
   def initialize
@@ -28,7 +25,7 @@ class Box
   def bin cmd
     results = ''
     chdir {
-      results = `bundle exec HI_APP #{cmd} 2>&1`
+      results = `bundle exec Hi_App #{cmd} 2>&1`
       if $?.exitstatus != 0
         raise results
       end
@@ -47,6 +44,10 @@ class Box
     shell_run "cp Gemfile.lock     #{FOLDER}/Gemfile.lock"
   end
   
+  def shell_run *args
+    Exit_Zero *args
+  end
+
 end # === Box
 
 BOX = Box.new

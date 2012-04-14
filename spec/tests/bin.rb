@@ -9,7 +9,7 @@ describe "permissions of bin/" do
 end # === permissions of bin/
 
 
-describe "HI_APP create/Hello" do
+describe "Hi_App create/Hello" do
   
   before { BOX.reset }
   
