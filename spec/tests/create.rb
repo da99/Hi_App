@@ -82,17 +82,17 @@ describe "Hello create name" do
     }
   end
 
-  it "creates a working app run by passenger" do
+  it "creates a working app run by thin" do
     port = rand(4000..5000)
     chdir {
       Dir.chdir('Hello_Prime') {
         begin
           BOX.shell_run "bundle update"
-          BOX.shell_run "bundle exec passenger start -d -p #{port}"
-          open("http://localhost:#{port}/").read
+          start port
+          read(port)
           .should.be == "Hi, Hello_Prime."
         ensure
-          BOX.shell_run("bundle exec passenger stop -p #{port}") if `ps aux`["-p #{port}"]
+          shutdown
         end
       }
     }
@@ -104,11 +104,11 @@ describe "Hello create name" do
       Dir.chdir('Hello_Prime') {
         begin
           BOX.shell_run "bundle update"
-          BOX.shell_run "bundle exec passenger start -d -p #{port}"
-          open("http://localhost:#{port}/time").read
+          start port
+          read(port, "/time")
           .should.match %r!Time: \d{2} - \d{2}!
         ensure
-          BOX.shell_run("bundle exec passenger stop -p #{port}") if `ps aux`["-p #{port}"]
+          shutdown
         end
       }
     }

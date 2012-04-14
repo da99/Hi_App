@@ -2,9 +2,9 @@
 require File.expand_path('spec/helper')
 require 'Hi_App'
 require 'Bacon_Colored'
-require "Exit_Zero"
+require 'Exit_Zero'
 require 'open-uri'
-
+require 'pry'
 
 def chdir
   BOX.chdir { yield }
@@ -12,6 +12,24 @@ end
 
 def BIN cmd
   BOX.bin cmd
+end
+
+def start port
+  Exit_Zero "bundle exec thin start -d -p #{port}"
+end
+
+def shutdown port = nil
+  pid_file = "tmp/pids/thin.pid"
+  if File.file?(pid_file)
+    Exit_Zero "bundle exec thin -P #{pid_file} stop"
+  end
+  
+  # BOX.shell_run("bundle exec thin stop -p #{port}") if `ps aux`["-p #{port}"]
+end
+
+def read port, path = "/"
+  sleep 0.2
+  open("http://localhost:#{port}#{path}").read
 end
 
 class Box
