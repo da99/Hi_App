@@ -25,10 +25,7 @@ class Box
   def bin cmd
     results = ''
     chdir {
-      results = `bundle exec Hi_App #{cmd} 2>&1`
-      if $?.exitstatus != 0
-        raise results
-      end
+      Exit_Zero "bundle exec Hi_App #{cmd}"
     }
     results
   end
