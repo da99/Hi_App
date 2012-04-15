@@ -17,6 +17,7 @@ class Hi_App
   def create name
     kname = name.sub(/^./) { |s| s.upcase }
     Exit_Zero "mkdir -p #{name}/public"
+    Exit_Zero "touch #{name}/public/.gitkeep"
     files = {}
 
     %w{ Gemfile config.ru NAME.rb .gitignore }.each { |f|

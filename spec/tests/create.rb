@@ -23,9 +23,9 @@ describe "Hello create name" do
     }
   end
 
-  it 'creates folder /name/public' do
+  it 'creates file /name/public/.gitkeep' do
     chdir {
-      File.directory?("Hello_Prime/public")
+      File.file?("Hello_Prime/public/.gitkeep")
       .should.be == true
     }
   end
