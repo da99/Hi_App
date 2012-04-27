@@ -1,5 +1,5 @@
 require 'Hi_App/version'
-require 'Exit_Zero'
+require 'Exit_0'
 
 class Hi_App
   
@@ -16,8 +16,8 @@ class Hi_App
 
   def create name
     kname = name.sub(/^./) { |s| s.upcase }
-    Exit_Zero "mkdir -p #{name}/public"
-    Exit_Zero "touch #{name}/public/.gitkeep"
+    Exit_0 "mkdir -p #{name}/public"
+    Exit_0 "touch #{name}/public/.gitkeep"
     files = {}
 
     %w{ Gemfile config.ru NAME.rb .gitignore }.each { |f|
@@ -32,9 +32,9 @@ class Hi_App
 
     Dir.chdir(name) {
       unless Dir.pwd[/\A\/tmp/]
-        Exit_Zero "bundle update"
+        Exit_0 "bundle update"
       end
-      Exit_Zero "git init && git add . && git commit -m \"Added: Hi_App generated code.\""
+      Exit_0 "git init && git add . && git commit -m \"Added: Hi_App generated code.\""
     }
   end # === def create_app
   

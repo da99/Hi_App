@@ -2,7 +2,7 @@
 require File.expand_path('spec/helper')
 require 'Hi_App'
 require 'Bacon_Colored'
-require 'Exit_Zero'
+require 'Exit_0'
 require 'open-uri'
 require 'pry'
 
@@ -15,13 +15,13 @@ def BIN cmd
 end
 
 def start port
-  Exit_Zero "bundle exec thin start -d -p #{port}"
+  Exit_0 "bundle exec thin start -d -p #{port}"
 end
 
 def shutdown port = nil
   pid_file = "tmp/pids/thin.pid"
   if File.file?(pid_file)
-    Exit_Zero "bundle exec thin -P #{pid_file} stop"
+    Exit_0 "bundle exec thin -P #{pid_file} stop"
   end
   
   # BOX.shell_run("bundle exec thin stop -p #{port}") if `ps aux`["-p #{port}"]
@@ -43,7 +43,7 @@ class Box
   def bin cmd
     results = ''
     chdir {
-      Exit_Zero "bundle exec Hi_App #{cmd}"
+      Exit_0 "bundle exec Hi_App #{cmd}"
     }
     results
   end
@@ -60,7 +60,7 @@ class Box
   end
   
   def shell_run *args
-    Exit_Zero *args
+    Exit_0 *args
   end
 
 end # === Box

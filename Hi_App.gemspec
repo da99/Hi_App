@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'Bacon_Colored'
   s.add_development_dependency 'pry'
   
-  s.add_runtime_dependency 'Exit_Zero'
+  s.add_runtime_dependency 'Exit_0'
   s.add_runtime_dependency 'sinatra'
   s.add_runtime_dependency 'thin'
   
