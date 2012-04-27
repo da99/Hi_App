@@ -3,11 +3,12 @@ describe "Hello create name" do
   
   before {
     chdir { 
+      `rm -rf Hello_Prime` 
       `rm -rf Hello` 
       prime = 'Hello_Prime'
       if not File.directory?(prime)
         BIN("create #{prime}")
-        at_exit { `rm -rf #{prime}`}
+        # at_exit { `rm -rf #{prime}`}
       end
     }
   }
@@ -79,6 +80,27 @@ describe "Hello create name" do
     chdir {
       `cd Hello_Prime && git log -n 1 --oneline`.strip
       .should.match %r!Hi_App generated code!
+    }
+  end
+
+  it 'creates a thin.yml file with log: /apps/tmp/NAME/thin.log' do
+    chdir('Hello_Prime') {
+      thin_yml['log']
+      .should == "/apps/tmp/Hello_Prime/thin.log"
+    }
+  end
+
+  it 'creates a thin.yml file with pid: /apps/tmp/NAME/thin.pid' do
+    chdir('Hello_Prime') {
+      thin_yml['pid']
+      .should == "/apps/tmp/Hello_Prime/thin.pid"
+    }
+  end
+
+  it 'creates a thin.yml file with environment: production' do
+    chdir('Hello_Prime') {
+      thin_yml['environment']
+      .should == "production"
     }
   end
 

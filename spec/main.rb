@@ -5,9 +5,14 @@ require 'Bacon_Colored'
 require 'Exit_0'
 require 'open-uri'
 require 'pry'
+require 'yaml'
 
-def chdir
-  BOX.chdir { yield }
+def thin_yml
+  YAML::load(File.read "thin.yml")
+end
+
+def chdir path = ""
+  BOX.chdir(path) { yield }
 end
 
 def BIN cmd
@@ -48,8 +53,8 @@ class Box
     results
   end
 
-  def chdir 
-    Dir.chdir(FOLDER) { yield }
+  def chdir path = ""
+    Dir.chdir(File.join FOLDER, path) { yield }
   end
 
   def reset

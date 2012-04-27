@@ -14,17 +14,23 @@ class Hi_App
 
   public # =======================================================
 
-  def create name
+  def create name, port = nil
     kname = name.sub(/^./) { |s| s.upcase }
+    port ||= rand(3000...7000)
     Exit_0 "mkdir -p #{name}/public"
     Exit_0 "touch #{name}/public/.gitkeep"
     files = {}
 
-    %w{ Gemfile config.ru NAME.rb .gitignore }.each { |f|
+    %w{ Gemfile config.ru NAME.rb .gitignore thin.yml }.each { |f|
       path = File.expand_path "#{name}/#{f.sub('NAME', name)}"
       next if File.exists?(path)
       
-      File.write path, read(f).gsub('KNAME', kname).gsub('NAME', name)
+      content = read(f)
+      .gsub('KNAME', kname)
+      .gsub('NAME', name)
+      .gsub('PORT', port.to_s)
+      
+      File.write path, content
     }
 
     files.each do |k,v|
