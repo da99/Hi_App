@@ -14,7 +14,7 @@ describe "Hi_App create/Hello" do
   before { BOX.reset }
   
   it "creates a dir called Hello" do
-    BIN('create/Hello')
+    BIN('create Hello')
     chdir {
       File.directory?('Hello')
       .should.be == true
