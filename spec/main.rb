@@ -18,6 +18,12 @@ end
 
 ORIG_THINS = thin_procs
 
+def no_extra_thins!
+  if thin_procs.size != ORIG_THINS.size
+    raise RuntimeError, "Thin processes not stopped: #{(ORIG_THINS - thin_procs).join ' '}"
+  end
+end
+
 def thin_yml
   YAML::load(File.read "thin.yml")
 end
@@ -31,6 +37,7 @@ def BIN cmd
 end
 
 def start
+  copy_gemfile
   
   app_name = File.basename(File.expand_path('.'))
   dir = "/apps/#{app_name}"
@@ -41,7 +48,13 @@ def start
   end
   
   Exit_0 "bundle exec thin -C thin.yml start"
+  sleep 0.3
   
+  begin
+    yield
+  ensure
+    shutdown
+  end
 end
 
 def shutdown
@@ -49,14 +62,11 @@ def shutdown
   Dir.glob(File.join dir, '*.pid').each { |f|
     Exit_0 "bundle exec thin -P #{f} stop"
   }
-  if thin_procs.size != ORIG_THINS.size
-    raise RuntimeError, "Thin processes not stopped: #{(ORIG_THINS - thin_procs).join ' '}"
-  end
+  no_extra_thins!
 end
 
 def read path = "/"
   port = thin_yml['port']
-  sleep 0.2
   open("http://localhost:#{port}#{path}").read
 end
 
