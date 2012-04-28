@@ -7,6 +7,17 @@ require 'open-uri'
 require 'pry'
 require 'yaml'
 
+GEMFILE = File.expand_path("Gemfile.lock")
+
+Exit_0 "rm -rf /apps/tmp"
+
+
+def thin_procs
+  Split_Lines(Exit_0("ps aux").out).select { |l| l['thin server'] }
+end
+
+ORIG_THINS = thin_procs
+
 def thin_yml
   YAML::load(File.read "thin.yml")
 end
@@ -19,22 +30,38 @@ def BIN cmd
   BOX.bin cmd
 end
 
-def start port
-  Exit_0 "bundle exec thin start -d -p #{port}"
-end
-
-def shutdown port = nil
-  pid_file = "tmp/pids/thin.pid"
-  if File.file?(pid_file)
-    Exit_0 "bundle exec thin -P #{pid_file} stop"
+def start
+  
+  app_name = File.basename(File.expand_path('.'))
+  dir = "/apps/#{app_name}"
+  
+  if !File.exists?(dir)
+    Exit_0 "ln -s #{File.expand_path '.'} #{dir}"
+    at_exit { Exit_0 "rm #{dir}" if File.exists?(dir) }
   end
   
-  # BOX.shell_run("bundle exec thin stop -p #{port}") if `ps aux`["-p #{port}"]
+  Exit_0 "bundle exec thin -C thin.yml start"
+  
 end
 
-def read port, path = "/"
+def shutdown
+  dir = File.dirname(thin_yml['pid'])
+  Dir.glob(File.join dir, '*.pid').each { |f|
+    Exit_0 "bundle exec thin -P #{f} stop"
+  }
+  if thin_procs.size != ORIG_THINS.size
+    raise RuntimeError, "Thin processes not stopped: #{(ORIG_THINS - thin_procs).join ' '}"
+  end
+end
+
+def read path = "/"
+  port = thin_yml['port']
   sleep 0.2
   open("http://localhost:#{port}#{path}").read
+end
+
+def copy_gemfile
+  File.write "Gemfile.lock", File.read(GEMFILE)
 end
 
 class Box

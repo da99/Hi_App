@@ -105,33 +105,19 @@ describe "Hello create name" do
   end
 
   it "creates a working app run by thin" do
-    port = rand(4000..5000)
-    chdir {
-      Dir.chdir('Hello_Prime') {
-        begin
-          BOX.shell_run "bundle update"
-          start port
-          read(port)
-          .should.be == "Hi, Hello_Prime."
-        ensure
-          shutdown
-        end
+    chdir('Hello_Prime') {
+      start {
+        read
+        .should.be == "Hi, Hello_Prime."
       }
     }
   end
 
   it "creates a working app with route /time" do
-    port = rand(4000..5000)
-    chdir {
-      Dir.chdir('Hello_Prime') {
-        begin
-          BOX.shell_run "bundle update"
-          start port
-          read(port, "/time")
-          .should.match %r!Time: \d{2} - \d{2}!
-        ensure
-          shutdown
-        end
+    chdir('Hello_Prime') {
+      start {
+        read("/time")
+        .should.match %r!Time: \d{2} - \d{2}!
       }
     }
   end
