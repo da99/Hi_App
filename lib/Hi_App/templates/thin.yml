@@ -12,6 +12,4 @@ require: []
 wait: 30
 user: deployer
 group: deployer
-servers: 1
-daemonize: false
 

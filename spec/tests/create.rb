@@ -104,6 +104,20 @@ describe "Hello create name" do
     }
   end
 
+  it 'creates a thin.yml file w/o: servers' do
+    chdir('Hello_Prime') {
+      thin_yml['serve']
+      .should.not == "serve"
+    }
+  end
+
+  it 'creates a thin.yml file w/o: daemonize' do
+    chdir('Hello_Prime') {
+      thin_yml['daem']
+      .should.not == "daem"
+    }
+  end
+
   it "creates a working app run by thin" do
     chdir('Hello_Prime') {
       start {

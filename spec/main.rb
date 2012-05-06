@@ -42,11 +42,15 @@ def start
   app_name = File.basename(File.expand_path('.'))
   dir = "/apps/#{app_name}"
   
-  if !File.exists?(dir)
+  if File.exists?(dir) && app_name != 'Hello_Prime'
+    raise ArgumentError, "#{app_name} already exists."
+  else
     Exit_0 "ln -s #{File.expand_path '.'} #{dir}"
     at_exit { Exit_0 "rm #{dir}" if File.exists?(dir) }
   end
   
+  Exit_0 %! echo "servers: 1"      >> thin.yml !
+  Exit_0 %! echo "daemonize: true" >> thin.yml !
   Exit_0 "bundle exec thin -C thin.yml start"
   sleep 0.3
   
