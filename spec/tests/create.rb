@@ -24,6 +24,13 @@ describe "Hello create name" do
     }
   end
 
+  it 'creates file /name/.gitignore' do
+    chdir {
+      File.file?("Hello_Prime/.gitignore")
+      .should.be == true
+    }
+  end
+
   it 'creates file /name/public/.gitkeep' do
     chdir {
       File.file?("Hello_Prime/public/.gitkeep")
