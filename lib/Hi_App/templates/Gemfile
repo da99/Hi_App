@@ -1,5 +1,17 @@
 
 source :rubygems
 
-gem 'sinatra'
-gem 'thin'
+group :production do
+  gem 'sinatra'
+  gem 'thin'
+end
+
+
+group :development do
+  gem 'pry'
+  gem 'rack-test'
+  gem 'bacon'
+  gem 'Bacon_Colored'
+  gem 'Bacon_Rack'
+end
+

@@ -143,6 +143,19 @@ describe "Hello create name" do
     }
   end
   
+  it "creates an app with passing specs" do
+    chdir('Hello_Prime') {
+      Bundler.with_clean_env {
+        should.not.raise {
+          Exit_0 {
+            `bundle exec bacon spec/lib/main.rb`
+            $?
+          }
+        }
+      }
+    }
+  end
+
 end # === describe UNI_MIND sinatra create_app
 
 

@@ -14,15 +14,27 @@ class Hi_App
 
   public # =======================================================
 
+  def exit_0 script
+    Bundler.with_clean_env {
+      Split_Lines(script).each { |cmd|
+        Exit_0 {
+          `#{cmd}`
+          $?
+        }
+      }
+    }
+  end
+
   def create name, port = nil
     kname = name.sub(/^./) { |s| s.upcase }
     port ||= rand(3000...7000)
-    Exit_0 "mkdir -p #{name}/public"
-    Exit_0 "touch #{name}/public/.gitkeep"
+    exit_0 "mkdir -p #{name}/public"
+    exit_0 "mkdir -p #{name}/spec/lib"
+    exit_0 "touch #{name}/public/.gitkeep"
     files = {}
 
-    %w{ Gemfile config.ru NAME.rb .gitignore thin.yml }.each { |f|
-      path = File.expand_path "#{name}/#{f.sub('NAME', name)}"
+    %w{ Gemfile config.ru NAME.rb .gitignore thin.yml spec__lib__main.rb }.each { |f|
+      path = File.expand_path "#{name}/#{f.sub('NAME', name).gsub('__','/')}"
       next if File.exists?(path)
       
       content = read(f)
@@ -37,10 +49,12 @@ class Hi_App
     end
 
     Dir.chdir(name) {
-      unless Dir.pwd[/\A\/tmp/]
-        Exit_0 "bundle update"
-      end
-      Exit_0 "git init && git add . && git commit -m \"Added: Hi_App generated code.\""
+      exit_0 %(
+        bundle update
+        git init 
+        git add . 
+        git commit -m "Added: Hi_App generated code."
+      )
     }
   end # === def create_app
   
