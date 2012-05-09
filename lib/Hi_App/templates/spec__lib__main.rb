@@ -38,7 +38,7 @@ if ARGV.size > 1 && ARGV[1, ARGV.size - 1].detect { |a| File.exists?(a) }
   # Do nothing. Bacon grabs the file.
 else
   Dir.glob('./specs/*.rb').each { |file|
-    require(file.sub '.rb', '' ) if File.basename(file)[%r!\A(C|M|V)_!]
+    require(file.sub '.rb', '' ) 
   }
 end
 

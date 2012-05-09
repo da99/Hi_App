@@ -33,7 +33,10 @@ class Hi_App
     exit_0 "touch #{name}/public/.gitkeep"
     files = {}
 
-    %w{ Gemfile config.ru NAME.rb .gitignore thin.yml spec__lib__main.rb }.each { |f|
+    Dir.glob("#{DIR}/templates/*", File::FNM_DOTMATCH).each { |raw_f|
+      next unless File.file?(raw_f)
+      
+      f = File.basename(raw_f)
       path = File.expand_path "#{name}/#{f.sub('NAME', name).gsub('__','/')}"
       next if File.exists?(path)
       
@@ -50,7 +53,7 @@ class Hi_App
 
     Dir.chdir(name) {
       exit_0 %(
-        bundle update
+        bundle install
         git init 
         git add . 
         git commit -m "Added: Hi_App generated code."
